@@ -16,47 +16,18 @@
     <div class="gallery">
 
       <div class="center">
-        <form>
-          <input type="text" placeholder="Add new image URL">
-          <button class="button" type="button">Generate Image</button>
+        <form #f="ngForm" (submit)="addImage(f.value.tmb)">
+          <input type="text" placeholder="Add new image URL" [ngModel] name="tmb">
+          <button class="button" type="button" (click)="generateRandomImage()">Generate Image</button>
         </form>
       </div>
 
       <div class="image-container">
         <div class="grid">
-          <div class="cell">
-            <img class="responsive-image" src="https://picsum.photos/600/400?image=10">
-            <span class="icon cursor">✖</span>
+          <div class="cell" *ngFor="let item of items">
+            <img class="responsive-image" [src]="item">
+            <span class="icon cursor" (click)="delete(item)">✖</span>
           </div>
-
-          <div class="cell">
-            <img class="responsive-image" src="https://picsum.photos/600/400?image=10">
-            <span class="icon cursor">✖</span>
-          </div>
-
-
-          <div class="cell">
-            <img class="responsive-image" src="https://picsum.photos/600/400?image=10">
-            <span class="icon cursor">✖</span>
-          </div>
-
-
-          <div class="cell">
-            <img class="responsive-image" src="https://picsum.photos/600/400?image=10">
-            <span class="icon cursor">✖</span>
-          </div>
-
-          <div class="cell">
-            <img class="responsive-image" src="https://picsum.photos/600/400?image=10">
-            <span class="icon cursor">✖</span>
-          </div>
-
-
-          <div class="cell">
-            <img class="responsive-image" src="https://picsum.photos/600/400?image=10">
-            <span class="icon cursor">✖</span>
-          </div>
-
         </div>
       </div>
     </div>
