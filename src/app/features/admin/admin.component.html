@@ -2,6 +2,7 @@
     <div class="center">
       <img
         class="player-image"
+        *ngIf="this.images.length > 0"
         [src]="this.images[this.activeImage]"
       >
 
