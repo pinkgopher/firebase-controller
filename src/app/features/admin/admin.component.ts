@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
-import { defineBase } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-admin',
@@ -8,20 +7,31 @@ import { defineBase } from '@angular/core/src/render3';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-  items: string[] = [];
+  images: string[] = [];
+  activeImage: number = 0;
+
+  setActiveImage(val: number) {
+    this.activeImage = val
+    this.db.object('presentation/activeImage').set(val)
+  }
+
+  setImages(val: string[]) {
+    this.images = val
+    this.db.object('presentation/images').set(val)
+  }
 
   constructor(private db: AngularFireDatabase) { }
 
   ngOnInit() {
     this.db.object('presentation').valueChanges().subscribe((val: any) => {
       //console.log(val);
-      this.items = val.images;
+      this.images = val.images;
+      this.activeImage = val.activeImage
     });
   }
 
   addImage(url: string) {
-    this.items = [...this.items, url]
-    this.db.object('presentation/images').set(this.items)
+    this.setImages([...this.images, url])
   }
 
   generateRandomImage() {
@@ -31,7 +41,24 @@ export class AdminComponent implements OnInit {
   }
 
   delete(url: string) {
-    this.items = this.items.filter(item => item !== url)
-    this.db.object('presentation/images').set(this.items)
+    if (this.images.length <= 1) {
+      return
+    }
+    if (this.activeImage === this.images.length-1) {
+      this.setActiveImage(this.activeImage-1)
+    }
+    this.setImages(this.images.filter(item => item !== url))
+  }
+
+  prev() {
+    if (this.activeImage > 0) {
+      this.setActiveImage(this.activeImage-1)
+    }
+  }
+
+  next() {
+    if (this.activeImage < this.images.length-1) {
+      this.setActiveImage(this.activeImage+1)
+    }
   }
 }
